@@ -5,11 +5,15 @@ from .views import (
     ProjectList,
     ProjectDetail,
     ProfileViewSet,
-    )
+    CertifyingInstitutionViewSet,
+    CertificateViewSet
+)
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
+router.register(r'certifying-institutions', CertifyingInstitutionViewSet)
+router.register(r'certificates', CertificateViewSet)
 
 urlpatterns = [
     path('profiles/', ProfileList.as_view(), name='profile-list'),

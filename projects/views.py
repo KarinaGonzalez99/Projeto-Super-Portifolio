@@ -1,6 +1,10 @@
 from rest_framework import generics, viewsets
-from .models import Profile, Project
-from .serializers import ProfileSerializer
+from .models import Profile, Project, CertifyingInstitution, Certificate
+from .serializers import (
+    ProfileSerializer,
+    CertifyingInstitutionSerializer,
+    CertificateSerializer,
+    )
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
     IsAuthenticated,
@@ -52,3 +56,13 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+
+
+class CertifyingInstitutionViewSet(viewsets.ModelViewSet):
+    queryset = CertifyingInstitution.objects.all()
+    serializer_class = CertifyingInstitutionSerializer
+
+
+class CertificateViewSet(viewsets.ModelViewSet):
+    queryset = Certificate.objects.all()
+    serializer_class = CertificateSerializer
