@@ -61,8 +61,10 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
 class CertifyingInstitutionViewSet(viewsets.ModelViewSet):
     queryset = CertifyingInstitution.objects.all()
     serializer_class = CertifyingInstitutionSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class CertificateViewSet(viewsets.ModelViewSet):
     queryset = Certificate.objects.all()
     serializer_class = CertificateSerializer
+    permission_classes = [IsAuthenticated]
