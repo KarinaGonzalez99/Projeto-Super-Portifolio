@@ -34,13 +34,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
     def retrieve(self, request, *args, **kwargs):
-        if request.method == 'GET':
+        if self.request.method == "GET":
+            kwargs.get("pk")
             profile = self.get_object()
-            return render(
-                request,
-                'projects/templates/profile_detail.html',
-                {'profile': profile}
-                )
+            context = {"profile": profile}
+            return render(request, "profile_detail.html", context)
         return super().retrieve(request, *args, **kwargs)
 
 
