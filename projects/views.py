@@ -15,11 +15,6 @@ from .serializers import ProjectSerializer
 from django.shortcuts import render
 
 
-class ProfileList(generics.ListCreateAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
-
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
