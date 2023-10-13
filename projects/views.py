@@ -1,4 +1,4 @@
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 from .models import Profile, Project, CertifyingInstitution, Certificate
 from .serializers import (
     ProfileSerializer,
@@ -6,21 +6,11 @@ from .serializers import (
     CertificateSerializer,
     )
 from rest_framework.permissions import (
-    IsAuthenticatedOrReadOnly,
-    IsAuthenticated,
-    AllowAny,
+        AllowAny,
+        IsAuthenticated,
 )
-from rest_framework.renderers import TemplateHTMLRenderer
 from .serializers import ProjectSerializer
 from django.shortcuts import render
-
-
-class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'profile_detail.html'
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -36,21 +26,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if self.request.method == "GET":
             kwargs.get("pk")
             profile = self.get_object()
-            context = {"profile": profile}
-            return render(request, "profile_detail.html", context)
+            return render(request, "profile_detail.html", {"profile": profile})
         return super().retrieve(request, *args, **kwargs)
 
 
-class ProjectList(generics.ListCreateAPIView):
+class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
 
 
 class CertifyingInstitutionViewSet(viewsets.ModelViewSet):

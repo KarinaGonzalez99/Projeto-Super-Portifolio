@@ -14,26 +14,45 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class NestedCertificatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certificate
+        fields = [
+            "id",
+            "name",
+            "timestamp"
+            ]
+
+
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
-        fields = '__all__'
+        fields = (
+            'id',
+            'name',
+            'certifying_institution',
+            'timestamp',
+            'profiles'
+            )
 
 
 class CertifyingInstitutionSerializer(serializers.ModelSerializer):
-    certificates = CertificateSerializer(many=True)
+    certificates = NestedCertificatesSerializer(many=True, required=False)
 
     class Meta:
         model = CertifyingInstitution
-        fields = '__all__'
+        fields = ["id", "name", "url", "certificates"]
 
     def create(self, validated_data):
-        certificates_data = validated_data.pop('certificates')
-        institution = CertifyingInstitution.objects.create(**validated_data)
-        for cert_data in certificates_data:
-            Certificate.objects.create(
-                certifying_institution=institution,
-                **cert_data,
-                )
+        certificates_data = validated_data.pop('certificates', [])
+        certifying_institution = CertifyingInstitution.objects.create(
+            **validated_data
+            )
 
-        return institution
+        for certificate_data in certificates_data:
+            Certificate.objects.create(
+                certifying_institution=certifying_institution,
+                **certificate_data
+            )
+
+        return certifying_institution
